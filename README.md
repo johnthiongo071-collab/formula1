@@ -36,7 +36,6 @@ Five deeper analyses, each with an expandable SQL + Python code block and a writ
 |-----|-----------|-------------|
 | Pole → Win Rate | Bar chart | Pole position wins ~40% of races; P1+P2 account for ~59% of all wins |
 | Driver Nationalities | Horizontal bar | British & German drivers account for ~65% of all wins in this period |
-| Constructor Seasons | Multi-line | Clear three-era story: Brawn → Red Bull → Mercedes dominance |
 | DNF Reasons | Doughnut chart | Engine failures lead (~18%), closely followed by collisions (~16%) |
 | Pit Stop Speed | Horizontal bar | Red Bull & Mercedes are ~4 seconds faster per stop than the slowest teams |
 
