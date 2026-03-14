@@ -138,6 +138,3 @@ xdg-open f1_full_dashboard.html    # Linux
 
 ---
 
-## 📄 License
-
-This project is for educational and analytical purposes. F1 data sourced from the [Ergast Developer API](http://ergast.com/mrd/) database export.
