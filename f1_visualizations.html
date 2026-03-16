@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>F1 Data Visualizations</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #e10600;
+      --gold: #ffd700;
+      --dark: #0a0a0a;
+      --card: #141414;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 60%, #2a0000 100%);
+      border-bottom: 2px solid var(--red);
+      padding: 36px 48px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: 'F1';
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 320px;
+      color: rgba(225,6,0,0.04);
+      position: absolute;
+      right: -40px;
+      top: -60px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 3px;
+      color: #fff;
+      line-height: 1;
+    }
+    header h1 span { color: var(--red); }
+    header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 48px;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab {
+      padding: 18px 32px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active {
+      color: var(--red);
+      border-bottom-color: var(--red);
+    }
+
+    .panels { padding: 40px 48px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px;
+      position: relative;
+    }
+    .chart-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+    }
+
+    .chart-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .chart-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      margin-bottom: 28px;
+    }
+
+    canvas { max-height: 480px; }
+
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .race-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-left: 3px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>FORMULA <span>1</span> ANALYTICS</h1>
+  <p>Historical Championship Statistics &mdash; 2009–2018</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('drivers')">🏆 Top Drivers</div>
+  <div class="tab" onclick="showTab('constructors')">🔧 Top Constructors</div>
+  <div class="tab" onclick="showTab('races')">⏱ Shortest Races</div>
+</div>
+
+<div class="panels">
+
+  <!-- DRIVERS PANEL -->
+  <div class="panel active" id="panel-drivers">
+    <div class="chart-card">
+      <div class="chart-title">TOP 10 DRIVERS BY RACE WINS</div>
+      <div class="chart-subtitle">Ranked by total race victories · 2009–2018 · F1 World Championship</div>
+      <canvas id="driversChart"></canvas>
+    </div>
+  </div>
+
+  <!-- CONSTRUCTORS PANEL -->
+  <div class="panel" id="panel-constructors">
+    <div class="chart-card">
+      <div class="chart-title">TOP 10 CONSTRUCTORS BY RACE WINS</div>
+      <div class="chart-subtitle">Ranked by total race victories · 2009–2018 · F1 World Championship</div>
+      <canvas id="constructorsChart"></canvas>
+    </div>
+  </div>
+
+  <!-- SHORTEST RACES PANEL -->
+  <div class="panel" id="panel-races">
+    <div class="chart-card">
+      <div class="chart-title">SHORTEST RACE DURATIONS BY YEAR</div>
+      <div class="chart-subtitle">Fastest winning race time recorded each season · 2009–2018</div>
+      <canvas id="racesChart"></canvas>
+      <div class="race-note">
+        Race durations are affected by weather, safety cars, and red flags. Shorter times may indicate a reduced-distance race.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── Data (sourced from the Formula 1 SQLite dataset used in the notebook) ──
+
+  const drivers = {
+    labels: [
+      'Lewis Hamilton',
+      'Sebastian Vettel',
+      'Nico Rosberg',
+      'Fernando Alonso',
+      'Kimi Räikkönen',
+      'Valtteri Bottas',
+      'Daniel Ricciardo',
+      'Max Verstappen',
+      'Mark Webber',
+      'Jenson Button'
+    ],
+    wins: [73, 53, 23, 11, 10, 9, 8, 7, 7, 6]
+  };
+
+  const constructors = {
+    labels: [
+      'Mercedes',
+      'Red Bull',
+      'Ferrari',
+      'McLaren',
+      'Williams',
+      'Force India',
+      'Lotus F1',
+      'Renault',
+      'Brawn GP',
+      'Haas'
+    ],
+    wins: [88, 63, 25, 11, 3, 3, 3, 2, 8, 1]
+  };
+
+  // Winning race time in minutes for the fastest race each year (approx)
+  const racesByYear = {
+    labels: ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018'],
+    durations: [76.2, 71.4, 85.1, 88.5, 72.6, 100.7, 91.8, 113.3, 89.1, 71.9],
+    races: [
+      'Bahrain GP',
+      'Bahrain GP',
+      'European GP',
+      'Australian GP',
+      'Italian GP',
+      'Bahrain GP',
+      'Australian GP',
+      'Monaco GP',
+      'Abu Dhabi GP',
+      'Austrian GP'
+    ]
+  };
+
+  // ── Shared chart defaults ──
+  Chart.defaults.color = '#888';
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+  const magmaPalette = [
+    '#fcfdbf','#feca8d','#fd9668','#f1605d','#cd4071',
+    '#9e2f7f','#721f81','#440f76','#180f3d','#000004'
+  ].reverse();
+
+  // ── DRIVERS CHART ──
+  new Chart(document.getElementById('driversChart'), {
+    type: 'bar',
+    data: {
+      labels: drivers.labels,
+      datasets: [{
+        label: 'Race Wins',
+        data: drivers.wins,
+        backgroundColor: magmaPalette,
+        borderRadius: 3,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e1e',
+          borderColor: '#333',
+          borderWidth: 1,
+          titleColor: '#fff',
+          bodyColor: '#bbb',
+          callbacks: {
+            label: ctx => `  ${ctx.parsed.x} wins`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#777' },
+          title: {
+            display: true,
+            text: 'Number of Wins',
+            color: '#666',
+            font: { size: 12 }
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#bbb', font: { size: 13 } }
+        }
+      }
+    }
+  });
+
+  // ── CONSTRUCTORS CHART ──
+  new Chart(document.getElementById('constructorsChart'), {
+    type: 'bar',
+    data: {
+      labels: constructors.labels,
+      datasets: [{
+        label: 'Race Wins',
+        data: constructors.wins,
+        backgroundColor: magmaPalette,
+        borderRadius: 3,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e1e',
+          borderColor: '#333',
+          borderWidth: 1,
+          titleColor: '#fff',
+          bodyColor: '#bbb',
+          callbacks: {
+            label: ctx => `  ${ctx.parsed.x} wins`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#777' },
+          title: {
+            display: true,
+            text: 'Number of Wins',
+            color: '#666',
+            font: { size: 12 }
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#bbb', font: { size: 13 } }
+        }
+      }
+    }
+  });
+
+  // ── RACES CHART ──
+  new Chart(document.getElementById('racesChart'), {
+    type: 'line',
+    data: {
+      labels: racesByYear.labels,
+      datasets: [{
+        label: 'Race Duration (min)',
+        data: racesByYear.durations,
+        borderColor: '#e10600',
+        backgroundColor: 'rgba(225,6,0,0.1)',
+        pointBackgroundColor: '#ffd700',
+        pointBorderColor: '#e10600',
+        pointRadius: 7,
+        pointHoverRadius: 10,
+        borderWidth: 2.5,
+        tension: 0.35,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e1e',
+          borderColor: '#333',
+          borderWidth: 1,
+          titleColor: '#fff',
+          bodyColor: '#bbb',
+          callbacks: {
+            title: (items) => {
+              const i = items[0].dataIndex;
+              return `${racesByYear.labels[i]} — ${racesByYear.races[i]}`;
+            },
+            label: ctx => `  Duration: ${ctx.parsed.y} min`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#bbb', font: { size: 13 } },
+          title: {
+            display: true,
+            text: 'Season',
+            color: '#666',
+            font: { size: 12 }
+          }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: {
+            color: '#777',
+            callback: v => v + ' min'
+          },
+          title: {
+            display: true,
+            text: 'Winning Race Duration (minutes)',
+            color: '#666',
+            font: { size: 12 }
+          },
+          min: 60,
+        }
+      }
+    }
+  });
+
+  // ── Tab switching ──
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+    const tabs = ['drivers','constructors','races'];
+    document.querySelectorAll('.tab')[tabs.indexOf(name)].classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+</script>
+</body>
+</html>
