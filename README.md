@@ -138,22 +138,16 @@ xdg-open f1_full_dashboard.html    # Linux
 | HTML / CSS / JS | Dashboard UI |
 
 ---
-
 ## 🌐 Live Dashboards
-- [Core Charts](https://johnthiongo071-collab.github.io/formula1//formula1-analytics/f1_visualizations.html)
-- [Full Dashboard](https://johnthiongo071-collab.github.io/formula1//formula1-analytics/f1_full_dashboard.html)
-```
 
----
+| Dashboard | Description |
+|-----------|-------------|
+| [🏆 Core Charts](https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html) | Top drivers, constructors & shortest races |
+| [📊 Full Analytics Dashboard](https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html) | Pole win rate, nationalities, constructor seasons, DNF reasons & pit stops — each with SQL + Python code |
 
-**Option 2 — nbviewer (for the notebook)**
+### View the Dashboards
 
-Paste your notebook's GitHub URL into [nbviewer.org](https://nbviewer.org) and it renders it as a readable page. Good for sharing `f1.ipynb` specifically.
+No setup needed — open directly in your browser:
 
----
-
-**Option 3 — htmlpreview.github.io**
-
-No setup needed — just prefix any raw GitHub HTML file URL:
-```
-https://htmlpreview.github.io/?https://github.com/your-username/formula1-analytics/blob/main/f1_full_dashboard.html
+- 🏆 **Core Charts** → https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html
+- 📊 **Full Analytics Dashboard** → https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html
