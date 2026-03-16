@@ -30,7 +30,7 @@ Three tabbed charts matching the notebook's magma palette style:
 | ⏱ Shortest Races | Line chart — fastest winning race time per season | `races`, `results` |
 
 ### `f1_full_dashboard.html` — Extended Analysis
-f1_full_dashboard.html
+
 Five deeper analyses, each with an expandable SQL + Python code block and a written insight:
 
 | Tab | Chart Type | Key Finding |
