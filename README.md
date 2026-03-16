@@ -21,8 +21,6 @@ formula1-analytics/
 ## 📊 Visualisations
 ### View the Dashboards
 
-No setup needed — open directly in your browser:
-
 - 🏆 **Core Charts** → https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html
 - 📊 **Full Analytics Dashboard** → https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html
 
