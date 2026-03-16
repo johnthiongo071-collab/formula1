@@ -19,6 +19,12 @@ formula1-analytics/
 ---
 
 ## 📊 Visualisations
+### View the Dashboards
+
+No setup needed — open directly in your browser:
+
+- 🏆 **Core Charts** → https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html
+- 📊 **Full Analytics Dashboard** → https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html
 
 ### `f1_visualizations.html` — Core Charts
 Three tabbed charts matching the notebook's magma palette style:
@@ -138,16 +144,3 @@ xdg-open f1_full_dashboard.html    # Linux
 | HTML / CSS / JS | Dashboard UI |
 
 ---
-## 🌐 Live Dashboards
-
-| Dashboard | Description |
-|-----------|-------------|
-| [🏆 Core Charts](https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html) | Top drivers, constructors & shortest races |
-| [📊 Full Analytics Dashboard](https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html) | Pole win rate, nationalities, constructor seasons, DNF reasons & pit stops — each with SQL + Python code |
-
-### View the Dashboards
-
-No setup needed — open directly in your browser:
-
-- 🏆 **Core Charts** → https://johnthiongo071-collab.github.io/formula1/f1_visualizations.html
-- 📊 **Full Analytics Dashboard** → https://johnthiongo071-collab.github.io/formula1/f1_full_dashboard.html
