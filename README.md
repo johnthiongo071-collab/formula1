@@ -139,3 +139,21 @@ xdg-open f1_full_dashboard.html    # Linux
 
 ---
 
+## 🌐 Live Dashboards
+- [Core Charts](https://johnthiongo071-collab.github.io/formula1//formula1-analytics/f1_visualizations.html)
+- [Full Dashboard](https://johnthiongo071-collab.github.io/formula1//formula1-analytics/f1_full_dashboard.html)
+```
+
+---
+
+**Option 2 — nbviewer (for the notebook)**
+
+Paste your notebook's GitHub URL into [nbviewer.org](https://nbviewer.org) and it renders it as a readable page. Good for sharing `f1.ipynb` specifically.
+
+---
+
+**Option 3 — htmlpreview.github.io**
+
+No setup needed — just prefix any raw GitHub HTML file URL:
+```
+https://htmlpreview.github.io/?https://github.com/your-username/formula1-analytics/blob/main/f1_full_dashboard.html
